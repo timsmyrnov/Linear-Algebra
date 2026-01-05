@@ -106,7 +106,7 @@ namespace linear_algebra {
             return *this;
         }
 
-        auto& insert_col(int idx, std::vector<double> col) {
+        auto& replace_col(int idx, std::vector<double> col) {
             size_t m_height = height();
             size_t c_size = col.size();
             if (c_size != m_height) {
