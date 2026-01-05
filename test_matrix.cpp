@@ -1,7 +1,9 @@
 #include "include/matrix.hpp"
 #include <vector>
+#include <unordered_map>
+#include <optional>
 
-int main(int argc, char* argv[]) {
+int basic_test(int argc, char* argv[]) {
     matrix::square_matrix<double> mtx(5);
     std::vector<double> column = {0, 0, 0, 0, 0};
 
@@ -57,4 +59,15 @@ int main(int argc, char* argv[]) {
         mtx.print(std::cout) << std::endl;
     }
     return 0;
+}
+
+int det_test(int argc, char* argv[]) {
+    return 0;
+}
+
+int main(int argc, char* argv[]) {
+    // basic_test(argc, argv);
+    using bitvec_t = std::vector<bool> ;
+    using bvp_t = std::pair<bitvec_t, bitvec_t>;
+    
 }
