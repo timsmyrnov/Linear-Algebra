@@ -2,26 +2,23 @@
 #include <vector>
 #include <iostream>
 
-namespace linear_algebra {
+namespace matrix {
 
     template <typename T>
-    class matrix {
+    class square_matrix {
         using value_t = T;
         using row_t = std::vector<value_t>;
         using data_t = std::vector<row_t>;
 
         data_t rows;
 
-        size_t height() const { return rows.size(); }
-        size_t width() const { return (rows.empty() ? 0: rows[0].size()); }
-        size_t size() const { return std::min(height(), width()); }
-        bool is_square() const { return height() == width(); }
+        size_t size() const { return rows.size(); }
 
         public:
 
         // Constructor
-        matrix(size_t n, size_t m): rows(n) {
-            for(auto& r: rows) { r.resize(m); }
+        square_matrix(size_t n): rows(n) {
+            for(auto& r: rows) { r.resize(n); }
         }
         auto& row(size_t i) { return rows[i]; }
         const auto& row(size_t i) const { return rows[i]; }
@@ -87,11 +84,10 @@ namespace linear_algebra {
 
         template <typename CB>
         void col_walk(CB&& cb, int idx) {
-            if (idx < 0 || idx >= width()) {
+            if (idx < 0 || idx >= size()) {
                 return;
             }
-            size_t m_height = height();
-            for(size_t i = 0; i < m_height; i++) {
+            for(size_t i = 0; i < size(); i++) {
                 std::forward<CB>(cb)(rows[i][idx], i);
             }
         }
@@ -106,10 +102,8 @@ namespace linear_algebra {
             return *this;
         }
 
-        auto& replace_col(int idx, std::vector<double> col) {
-            size_t m_height = height();
-            size_t c_size = col.size();
-            if (c_size != m_height) {
+        auto& replace_col(int idx, const std::vector<double>& col) {
+            if (col.size() != size()) {
                 return *this;
             }
             col_walk([&](auto& cell, size_t i) { cell = col[i]; }, idx);

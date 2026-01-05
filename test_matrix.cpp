@@ -2,7 +2,7 @@
 #include <vector>
 
 int main(int argc, char* argv[]) {
-    linear_algebra::matrix<double> mtx(5,5);
+    matrix::square_matrix<double> mtx(5);
     std::vector<double> column = {0, 0, 0, 0, 0};
 
     { // Direct access
