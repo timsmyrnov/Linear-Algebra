@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
         mtx.diag_walk([](auto& c, size_t i){ c = 1; });
         mtx.print(std::cout) << std::endl;
         mtx.scale(10).increment(5).print(std::cout) << std::endl;
-        mtx.insert_col(1, column);
+        mtx.replace_col(3, column);
         mtx.print(std::cout) << std::endl;
     }
     return 0;

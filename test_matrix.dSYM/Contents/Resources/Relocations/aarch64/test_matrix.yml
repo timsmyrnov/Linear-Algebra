@@ -99,7 +99,7 @@ relocations:
   - { offsetInCU: 0xDB76, offset: 0xDB76, size: 0x8, addend: 0x0, symName: '__ZN14linear_algebra6matrixIdE9diag_walkIZ4mainE3$_3EEvOT_', symObjAddr: 0xC70, symBinAddr: 0x100001BD0, symSize: 0x90 }
   - { offsetInCU: 0xDBE2, offset: 0xDBE2, size: 0x8, addend: 0x0, symName: __ZN14linear_algebra6matrixIdE5scaleEd, symObjAddr: 0xD00, symBinAddr: 0x100001C60, symSize: 0x3C }
   - { offsetInCU: 0xDC44, offset: 0xDC44, size: 0x8, addend: 0x0, symName: __ZN14linear_algebra6matrixIdE9incrementEd, symObjAddr: 0xD3C, symBinAddr: 0x100001C9C, symSize: 0x3C }
-  - { offsetInCU: 0xDCA6, offset: 0xDCA6, size: 0x8, addend: 0x0, symName: __ZN14linear_algebra6matrixIdE10insert_colEiNSt3__16vectorIdNS2_9allocatorIdEEEE, symObjAddr: 0xD78, symBinAddr: 0x100001CD8, symSize: 0x94 }
+  - { offsetInCU: 0xDCA6, offset: 0xDCA6, size: 0x8, addend: 0x0, symName: __ZN14linear_algebra6matrixIdE11replace_colEiNSt3__16vectorIdNS2_9allocatorIdEEEE, symObjAddr: 0xD78, symBinAddr: 0x100001CD8, symSize: 0x94 }
   - { offsetInCU: 0xDD38, offset: 0xDD38, size: 0x8, addend: 0x0, symName: __ZNSt3__16vectorIdNS_9allocatorIdEEEC1ERKS3_, symObjAddr: 0xE0C, symBinAddr: 0x100001D6C, symSize: 0x34 }
   - { offsetInCU: 0xDD72, offset: 0xDD72, size: 0x8, addend: 0x0, symName: __ZNSt3__16vectorIdNS_9allocatorIdEEED1B8ue170006Ev, symObjAddr: 0xE40, symBinAddr: 0x100001DA0, symSize: 0x2C }
   - { offsetInCU: 0xDD9B, offset: 0xDD9B, size: 0x8, addend: 0x0, symName: __ZN14linear_algebra6matrixIdED1Ev, symObjAddr: 0xE6C, symBinAddr: 0x100001DCC, symSize: 0x2C }
@@ -112,10 +112,10 @@ relocations:
   - { offsetInCU: 0xE069, offset: 0xE069, size: 0x8, addend: 0x0, symName: __ZZN14linear_algebra6matrixIdE9incrementEdENKUlRT_E_clIdEEDaS3_, symObjAddr: 0x1150, symBinAddr: 0x1000020B0, symSize: 0x2C }
   - { offsetInCU: 0xE0A9, offset: 0xE0A9, size: 0x8, addend: 0x0, symName: __ZNK14linear_algebra6matrixIdE6heightEv, symObjAddr: 0x117C, symBinAddr: 0x1000020DC, symSize: 0x24 }
   - { offsetInCU: 0xE0CE, offset: 0xE0CE, size: 0x8, addend: 0x0, symName: __ZNKSt3__16vectorIdNS_9allocatorIdEEE4sizeB8ue170006Ev, symObjAddr: 0x11A0, symBinAddr: 0x100002100, symSize: 0x28 }
-  - { offsetInCU: 0xE0F8, offset: 0xE0F8, size: 0x8, addend: 0x0, symName: __ZN14linear_algebra6matrixIdE8col_walkIZNS1_10insert_colEiNSt3__16vectorIdNS3_9allocatorIdEEEEEUlRT_mE_EEvOS8_i, symObjAddr: 0x11C8, symBinAddr: 0x100002128, symSize: 0xD4 }
+  - { offsetInCU: 0xE0F8, offset: 0xE0F8, size: 0x8, addend: 0x0, symName: __ZN14linear_algebra6matrixIdE8col_walkIZNS1_11replace_colEiNSt3__16vectorIdNS3_9allocatorIdEEEEEUlRT_mE_EEvOS8_i, symObjAddr: 0x11C8, symBinAddr: 0x100002128, symSize: 0xD4 }
   - { offsetInCU: 0xE16D, offset: 0xE16D, size: 0x8, addend: 0x0, symName: __ZNKSt3__16vectorINS0_IdNS_9allocatorIdEEEENS1_IS3_EEE4sizeB8ue170006Ev, symObjAddr: 0x129C, symBinAddr: 0x1000021FC, symSize: 0x28 }
   - { offsetInCU: 0xE192, offset: 0xE192, size: 0x8, addend: 0x0, symName: __ZNK14linear_algebra6matrixIdE5widthEv, symObjAddr: 0x12C4, symBinAddr: 0x100002224, symSize: 0x58 }
-  - { offsetInCU: 0xE1C1, offset: 0xE1C1, size: 0x8, addend: 0x0, symName: __ZZN14linear_algebra6matrixIdE10insert_colEiNSt3__16vectorIdNS2_9allocatorIdEEEEENKUlRT_mE_clIdEEDaS8_m, symObjAddr: 0x131C, symBinAddr: 0x10000227C, symSize: 0x40 }
+  - { offsetInCU: 0xE1C1, offset: 0xE1C1, size: 0x8, addend: 0x0, symName: __ZZN14linear_algebra6matrixIdE11replace_colEiNSt3__16vectorIdNS2_9allocatorIdEEEEENKUlRT_mE_clIdEEDaS8_m, symObjAddr: 0x131C, symBinAddr: 0x10000227C, symSize: 0x40 }
   - { offsetInCU: 0xE20F, offset: 0xE20F, size: 0x8, addend: 0x0, symName: __ZNSt3__16vectorINS0_IdNS_9allocatorIdEEEENS1_IS3_EEEixB8ue170006Em, symObjAddr: 0x135C, symBinAddr: 0x1000022BC, symSize: 0x2C }
   - { offsetInCU: 0xE245, offset: 0xE245, size: 0x8, addend: 0x0, symName: __ZNSt3__16vectorIdNS_9allocatorIdEEEixB8ue170006Em, symObjAddr: 0x1388, symBinAddr: 0x1000022E8, symSize: 0x24 }
   - { offsetInCU: 0xE27B, offset: 0xE27B, size: 0x8, addend: 0x0, symName: __ZNKSt3__16vectorINS0_IdNS_9allocatorIdEEEENS1_IS3_EEE5emptyB8ue170006Ev, symObjAddr: 0x13AC, symBinAddr: 0x10000230C, symSize: 0x28 }
