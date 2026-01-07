@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <optional>
 
+using sqmatrix_double_t = matrix::square_matrix<double>;
+
 int basic_test(int argc, char* argv[]) {
     matrix::square_matrix<double> mtx(5);
     std::vector<double> column = {0, 0, 0, 0, 0};
@@ -61,13 +63,24 @@ int basic_test(int argc, char* argv[]) {
     return 0;
 }
 
+namespace {
+    void test_det(sqmatrix_double_t&& m) {
+        m.print(std::cout << "BEFORE: ");
+        bool elim_status = m.gauss_elimination();
+        m.print(std::cout << "AFTER: ") << (elim_status? "SUCCESS": "FAIL") <<std::endl;
+    }
+}
 int det_test(int argc, char* argv[]) {
+    test_det(sqmatrix_double_t{{{7,1}, {6,2}}}); // success
+    test_det(sqmatrix_double_t{{{4,6}, {2,3}}}); // fail
+    test_det(sqmatrix_double_t{{{7,1,3}, {14,2,6}, {2,3,5}}}); // success
+    test_det(sqmatrix_double_t{{{7,1,3}, {1,2,6}, {2,3,5}}}); // fail
+    test_det(sqmatrix_double_t{{{1,1,1}, {2,3,3}, {2,2,3}}}); // success
+    test_det(sqmatrix_double_t{{{1,0,0}, {0,1,0}, {0,0,1}}}); // success
     return 0;
 }
 
 int main(int argc, char* argv[]) {
     // basic_test(argc, argv);
-    using bitvec_t = std::vector<bool> ;
-    using bvp_t = std::pair<bitvec_t, bitvec_t>;
-    
+    det_test(argc, argv);
 }

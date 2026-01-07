@@ -3,6 +3,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <optional>
+#include <cmath>
 
 namespace matrix {
 
@@ -60,6 +61,7 @@ namespace matrix {
         square_matrix(size_t n): rows(n) {
             for(auto& r: rows) { r.resize(n); }
         }
+        square_matrix(const data_t& d) : rows(d) {}
         auto& row(size_t i) { return rows[i]; }
         const auto& row(size_t i) const { return rows[i]; }
 
@@ -148,6 +150,57 @@ namespace matrix {
             }
             col_walk([&](auto& cell, size_t i) { cell = col[i]; }, idx);
             return *this;
+        }
+        
+        struct rowops {
+            static void add_mult(row_t& dest, const row_t& src, double factor) {
+                for(int i = 0; i < dest.size(); i++) {
+                    dest[i] += src[i] * factor;
+                }
+            }
+
+            static void swap(row_t& x, row_t& y) {
+                x.swap(y);
+            }
+
+            static void mult(row_t& dest, double factor) {
+                dest *= factor;
+            }
+
+            static bool cell_is_zero(double x, double epsilon) {
+                return std::fabs(x) < std::fabs(epsilon);
+            }
+        };
+
+        bool gauss_elimination(double epsilon = 1e-12) {
+            size_t N = size();
+            auto fnz = [&](size_t r) -> std::optional<size_t> {
+                for(size_t i = r; i < N; i++) {
+                    if(!rowops::cell_is_zero(rows[i][r], epsilon))
+                        return i;
+                }
+                return std::nullopt;
+            };
+            for(int i = 0; i < N; i++) {
+                if(auto j = fnz(i); j.has_value()) {
+                    if(j.value() > i)
+                        rowops::swap(rows[i], rows[j.value()]);
+                } else {
+                    return false; // if we have 0's in i-th column for all rows from i-th down - the matrix is degenerate
+                }
+                row_t& the_row = rows[i];
+                for(int j = i + 1; j < N; j++) {
+                    row_t& r = rows[j];
+                    double the_value = the_row[i];
+                    double& ri = r[i];
+                    if(!rowops::cell_is_zero(ri, epsilon)) {
+                        double factor = - ri / the_value;
+                        rowops::add_mult(r, the_row, factor);
+                        ri = 0;    
+                    }
+                }
+            }
+            return true;
         }
     };
 }
