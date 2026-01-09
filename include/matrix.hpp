@@ -6,44 +6,23 @@
 #include <cmath>
 
 namespace matrix {
-
-    struct submatrix {
-        using bitvec_t = std::vector<bool>;
-        bitvec_t rows, cols; // true means included 
-        void exclude(size_t i, size_t j) {
-            rows[i] = cols[j] = false;
-        }
-        submatrix(size_t n) : rows(n), cols(n) {}
-    };
-
-    template <typename T>
-    struct submatrix_hash {
-        using value_t = T;
-        using colmap_t = std::unordered_map<submatrix::bitvec_t, value_t>;
-        using rowmap_t = std::unordered_map<submatrix::bitvec_t, colmap_t>;
-        rowmap_t map;
-
-        std::optional<value_t> get_value(const submatrix::bitvec_t& rows, const submatrix::bitvec_t& cols) const {
-            if(auto i = map.find(rows); i != map.end()) {
-                if(auto j = i->second.find(cols); j != i->second.end())
-                    return j->second;
-            }
-            return std::nullopt;
-        } 
-        void set_value(const submatrix::bitvec_t& rows, const submatrix::bitvec_t& cols, const value_t& v) {
-            typename rowmap_t::iterator rmi = map.find(rows);
-            
-            if(rmi == map.end())
-                rmi = map.insert(std::make_pair(rows, colmap_t{})).first;
-
-            colmap_t& colmap = *(rmi->second);
-            typename colmap_t::iterator cmi = colmap.find(cols);
-            if(cmi == colmap.end())
-                cmi = colmap.insert(std::make_pair(cols, value_t{})).first;
-                
-            cmi->second = v;
-        }
-    };
+    template <typename V>
+    inline V two_determinant(
+        const V& a11, const V& a12,
+        const V& a21, const V& a22
+    )
+    {
+        return (a11*a22 - a12*a21);
+    }
+    template <typename V>
+    inline V three_determinant(
+        const V& a11, const V& a12, const V& a13, 
+        const V& a21, const V& a22, const V& a23,
+        const V& a31, const V& a32, const V& a33
+    ) 
+    {
+        return (a11*a22*a33 + a31*a12*a23 + a21*a32*a13 - a31*a22*a13 - a21*a12*a33 - a32*a23*a11);
+    }
 
     template <typename T>
     class square_matrix {
@@ -125,6 +104,14 @@ namespace matrix {
         }
 
         template <typename CB>
+        void diag_walk(CB&& cb) const {
+            size_t d = size();
+            for(size_t i = 0; i < d; i++) {
+                std::forward<CB>(cb)(rows[i][i], i);
+            }
+        }
+
+        template <typename CB>
         void col_walk(CB&& cb, int idx) {
             if(idx < 0 || idx >= size()) {
                 return;
@@ -172,8 +159,9 @@ namespace matrix {
             }
         };
 
-        bool gauss_elimination(double epsilon = 1e-12) {
-            size_t N = size();
+        std::pair<bool, size_t> gauss_elimination(double epsilon = EPSILON) {
+            size_t N = size(), num_swaps = 0;
+
             auto fnz = [&](size_t r) -> std::optional<size_t> {
                 for(size_t i = r; i < N; i++) {
                     if(!rowops::cell_is_zero(rows[i][r], epsilon))
@@ -185,8 +173,9 @@ namespace matrix {
                 if(auto j = fnz(i); j.has_value()) {
                     if(j.value() > i)
                         rowops::swap(rows[i], rows[j.value()]);
+                        num_swaps++;
                 } else {
-                    return false; // if we have 0's in i-th column for all rows from i-th down - the matrix is degenerate
+                    return std::make_pair(false, num_swaps); // if we have 0's in i-th column for all rows from i-th down - the matrix is degenerate
                 }
                 row_t& the_row = rows[i];
                 for(int j = i + 1; j < N; j++) {
@@ -200,7 +189,39 @@ namespace matrix {
                     }
                 }
             }
-            return true;
+            return std::make_pair(true, num_swaps);
         }
+
+        value_t is_small() const { return rows.size() < 4; }
+        value_t determinant_small() const {
+            switch(rows.size()) {
+                case 1: return rows[0][0];
+                case 2: return two_determinant(
+                    rows[0][0], rows[0][1],
+                    rows[1][0], rows[1][1]
+                );
+                case 3: {
+                    return three_determinant(
+                        rows[0][0], rows[0][1], rows[0][2],
+                        rows[1][0], rows[1][1], rows[1][2],
+                        rows[2][0], rows[2][1], rows[2][2]
+                    );
+                }
+                default: return {};
+            }
+        }
+        value_t determinant(double epsilon = EPSILON) {
+            if(is_small()) return determinant_small();
+            else if(auto p = gauss_elimination(epsilon); p.first) {
+                double product = 1;
+                for(int i = 0; i < p.second; i++) {
+                    product *= -1;
+                }
+
+                return diag_walk([&product](const auto& c, size_t i){ product *= c; }), product;
+            }
+            return {};
+        }
+        static constexpr double EPSILON = 1e-12;
     };
 }

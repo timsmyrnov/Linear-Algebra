@@ -64,20 +64,40 @@ int basic_test(int argc, char* argv[]) {
 }
 
 namespace {
-    void test_det(sqmatrix_double_t&& m) {
+    int test_det(sqmatrix_double_t&& m) {
+        m.print(std::cout) << std::endl;
+        m.print(std::cout) << m.determinant() << std::endl;
+        return 0;
+    }
+    int test_gauss(sqmatrix_double_t&& m) {
         m.print(std::cout << "BEFORE: ");
-        bool elim_status = m.gauss_elimination();
-        m.print(std::cout << "AFTER: ") << (elim_status? "SUCCESS": "FAIL") <<std::endl;
+        bool elim_status = m.gauss_elimination().first;
+        m.print(std::cout << "AFTER: ") << (elim_status? "SUCCESS": "FAIL") << std::endl;
+        return 0;
     }
 }
+
 int det_test(int argc, char* argv[]) {
-    test_det(sqmatrix_double_t{{{7,1}, {6,2}}}); // success
-    test_det(sqmatrix_double_t{{{4,6}, {2,3}}}); // fail
-    test_det(sqmatrix_double_t{{{7,1,3}, {14,2,6}, {2,3,5}}}); // success
-    test_det(sqmatrix_double_t{{{7,1,3}, {1,2,6}, {2,3,5}}}); // fail
-    test_det(sqmatrix_double_t{{{1,1,1}, {2,3,3}, {2,2,3}}}); // success
-    test_det(sqmatrix_double_t{{{1,0,0}, {0,1,0}, {0,0,1}}}); // success
+    test_det(sqmatrix_double_t{{{5}}}); // 5
+    test_det(sqmatrix_double_t{{{7, 1}, {6, 2}}}); // 8
+    test_det(sqmatrix_double_t{{{0, 2, 0}, {1, 2, 3}, {4, 5, 6}}}); // 12
+    test_det(sqmatrix_double_t{{{1, 2}, {3, 4}}}); // -2
+    test_det(sqmatrix_double_t{{{0, 1}, {1, 0}}}); // -1
+    test_det(sqmatrix_double_t{{{1,0,0},{0,1,0},{0,0,1}}}); // 1
+    test_det(sqmatrix_double_t{
+    {{1, 9, 9, 9},
+    {0, 2, 8, 8},
+    {0, 0, 3, 7},
+    {0, 0, 0, 4}}}); // 24, already in row-echelon
+    test_det(sqmatrix_double_t{{{-3, -1,  4,  3},
+    {3, 2, -2, 0},
+    {3, 3, 0, 1},
+    {1, 3, 0, -2}}}); // 24
     return 0;
+}
+
+int gauss_test(int argc, char* argv[]) {
+    return test_gauss(sqmatrix_double_t{{{5, 4, 1, 2}, {9, 9, 9, 7}, {0, 2, 1, 8}}});
 }
 
 int main(int argc, char* argv[]) {
