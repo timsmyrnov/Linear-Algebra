@@ -171,9 +171,10 @@ namespace matrix {
             };
             for(int i = 0; i < N; i++) {
                 if(auto j = fnz(i); j.has_value()) {
-                    if(j.value() > i)
+                    if(j.value() > i) {
                         rowops::swap(rows[i], rows[j.value()]);
                         num_swaps++;
+                    }
                 } else {
                     return std::make_pair(false, num_swaps); // if we have 0's in i-th column for all rows from i-th down - the matrix is degenerate
                 }
@@ -214,11 +215,13 @@ namespace matrix {
             if(is_small()) return determinant_small();
             else if(auto p = gauss_elimination(epsilon); p.first) {
                 double product = 1;
+                int mult = 1;
                 for(int i = 0; i < p.second; i++) {
-                    product *= -1;
+                    mult *= -1;
                 }
 
-                return diag_walk([&product](const auto& c, size_t i){ product *= c; }), product;
+                diag_walk([&product](const auto& c, size_t i){ product *= c; });
+                return mult*product;
             }
             return {};
         }
