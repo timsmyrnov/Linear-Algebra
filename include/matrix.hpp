@@ -24,6 +24,13 @@ namespace matrix {
         return (a11*a22*a33 + a31*a12*a23 + a21*a32*a13 - a31*a22*a13 - a21*a12*a33 - a32*a23*a11);
     }
 
+    namespace square_matrix_exception {
+        struct size : public  std::exception {};
+        struct numeric : public  std::exception {};
+        struct degenerate : public  std::exception {};
+    }
+
+
     template <typename T>
     class square_matrix {
         using value_t = T;
@@ -225,6 +232,25 @@ namespace matrix {
             }
             return {};
         }
+        template <typename CB>
+        void zip(CB&& cb, const square_matrix& o) {
+            for(size_t i = 0; i < rows.size(); i++) {
+                auto& r1 = rows[i];
+                auto& r2 = o.rows[i];
+                for(size_t j = 0; j < r1.size(); j++) {
+                    std::forward<CB>(cb)(r1[j], r2[j], i, j);
+                }
+            }
+        }
+        void assert_size(const square_matrix& o) { if(o.size() != size()) {throw square_matrix_exception::size();} }
+        auto& operator +=(const square_matrix& o) {
+            assert_size(o);
+            zip([](auto& a, const auto& b, size_t i, size_t j){ a += b; }, o);
+            return *this;
+        }
+        
         static constexpr double EPSILON = 1e-12;
+
     };
+
 }
