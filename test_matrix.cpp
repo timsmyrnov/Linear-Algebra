@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <optional>
+#include <cassert>
 
 using sqmatrix_double_t = matrix::square_matrix<double>;
 
@@ -75,6 +76,9 @@ namespace {
         m.print(std::cout << "AFTER: ") << (elim_status? "SUCCESS": "FAIL") << std::endl;
         return 0;
     }
+    // int test_algebra(sqmatrix_double_t&& m1, sqmatrix_double_t&& m2) {
+    //     m1.print(std::cout << "BEFO")
+    // }
 }
 
 int det_test(int argc, char* argv[]) {
@@ -100,7 +104,44 @@ int gauss_test(int argc, char* argv[]) {
     return test_gauss(sqmatrix_double_t{{{5, 4, 1, 2}, {9, 9, 9, 7}, {0, 2, 1, 8}}});
 }
 
+int algebra_test(int argc, char* argv[]) {
+    { // dimensions 
+        sqmatrix_double_t m3{{{1,2,3},{4,5,6},{7,8,9}}}, m2{{{0, 1}, {1, 0}}}; 
+        
+        {
+            auto [i, i_end] = m3.row_begin_end(0);
+            std::cout << "ROW:[";
+            for(; i != i_end; i++) {
+                std::cout << *i << ", ";
+            }
+            std::cout << "]" << std::endl;
+        }
+        {
+            auto [i, i_end] = m3.col_begin_end(1);
+            std::cout << "COL:[";
+            for(; i != i_end; i++) {
+                std::cout << *i << ", ";
+            }
+            std::cout << "]" << std::endl;
+        }
+        auto increment = [](sqmatrix_double_t& l, const sqmatrix_double_t& r) -> int {
+            try {
+                l += r;
+                // ... 
+            } catch(const matrix::square_matrix_exception::size& e) {
+                return 1;
+            }
+            return 0;
+        };
+        assert(increment(m3, m2) == 1);      
+        assert(increment(m2, m3) == 1);      
+        assert(increment(m2, m2) == 0);      
+     
+        return 0;
+    }
+
+}
 int main(int argc, char* argv[]) {
     // basic_test(argc, argv);
-    det_test(argc, argv);
+    algebra_test(argc, argv);
 }
