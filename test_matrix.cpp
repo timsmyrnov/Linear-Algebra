@@ -106,8 +106,24 @@ int gauss_test(int argc, char* argv[]) {
 
 int algebra_test(int argc, char* argv[]) {
     { // dimensions 
-        sqmatrix_double_t m3{{{1,0,0},{0,1,0},{0,0,1}}}, m2{{{0, 1}, {1, 0}}}; 
+        sqmatrix_double_t m3{{{1,2,3},{4,5,6},{7,8,9}}}, m2{{{0, 1}, {1, 0}}}; 
         
+        {
+            auto [i, i_end] = m3.row_begin_end(0);
+            std::cout << "ROW:[";
+            for(; i != i_end; i++) {
+                std::cout << *i << ", ";
+            }
+            std::cout << "]" << std::endl;
+        }
+        {
+            auto [i, i_end] = m3.col_begin_end(1);
+            std::cout << "COL:[";
+            for(; i != i_end; i++) {
+                std::cout << *i << ", ";
+            }
+            std::cout << "]" << std::endl;
+        }
         auto increment = [](sqmatrix_double_t& l, const sqmatrix_double_t& r) -> int {
             try {
                 l += r;
@@ -123,6 +139,7 @@ int algebra_test(int argc, char* argv[]) {
      
         return 0;
     }
+
 }
 int main(int argc, char* argv[]) {
     // basic_test(argc, argv);

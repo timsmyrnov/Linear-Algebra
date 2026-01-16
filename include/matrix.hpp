@@ -248,7 +248,51 @@ namespace matrix {
             zip([](auto& a, const auto& b, size_t i, size_t j){ a += b; }, o);
             return *this;
         }
-        
+        struct const_col_iterator {
+            const square_matrix& m;
+            size_t row{};
+            const size_t col{}; 
+            const_col_iterator () = default;
+            const_col_iterator (const const_col_iterator& ) = default;
+            const_col_iterator (const square_matrix& x, size_t c, bool is_end=false) : 
+                m(x), row(is_end ? m.size() : 0), col(c)
+            {}
+            const_col_iterator& operator ++() { ++row; return *this; }
+            const_col_iterator& operator ++(int) { row++; return *this; }
+            const square_matrix::value_t& operator *() const { return m.rows[row][col]; } 
+            bool operator !=(const const_col_iterator& o) const { return col != o.col || row != o.row; }
+            bool operator ==(const const_col_iterator& o) const { return col == o.col && row == o.row; }
+        };
+
+        struct const_row_iterator {
+            typename square_matrix::row_t::const_iterator p; 
+            const_row_iterator() = default;
+            const_row_iterator(const const_row_iterator& ) = default;
+            const_row_iterator(const square_matrix& m, size_t i, bool is_end=false) : p(is_end ? m.rows[i].end(): m.rows[i].begin()) {}
+            const_row_iterator& operator ++() { ++p; return *this; }
+            const_row_iterator& operator ++(int) { p++; return *this; }
+            const square_matrix::value_t& operator *() const { return *p; } 
+            bool operator !=(const const_row_iterator& o) const {return p != o.p; }
+            bool operator ==(const const_row_iterator& o) const {return p == o.p; }
+            /* 
+            const_row_iterator ri = m.row_begin(i), ri_end = m.row_end(i);
+            const_col_iterator ci = m.col_begin(i), ci_end = m.col_end(i);
+            for(; ri = row_end(i); ri++, ci++) {
+            }
+            */
+        };
+        const_row_iterator row_begin(size_t r) const { return const_row_iterator(*this, r); }
+        const_row_iterator row_end(size_t r) const { return const_row_iterator(*this, r, true); }
+        std::pair<const_row_iterator, const_row_iterator> row_begin_end(size_t r) const { 
+            return std::make_pair(row_begin(r), row_end(r)); 
+        }
+
+        const_col_iterator col_begin(size_t r) const { return const_col_iterator(*this, r); }
+        const_col_iterator col_end(size_t r) const { return const_col_iterator(*this, r, true); }
+        std::pair<const_col_iterator, const_col_iterator> col_begin_end(size_t r) const { 
+            return std::make_pair(col_begin(r), col_end(r)); 
+        }
+
         static constexpr double EPSILON = 1e-12;
 
     };
