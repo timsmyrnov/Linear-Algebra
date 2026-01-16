@@ -1,5 +1,0 @@
----
-triple:          'arm64-apple-darwin'
-binary-path:     '/Users/andre/dev/Cramers-Rule/test_matrix'
-relocations:     []
-...
