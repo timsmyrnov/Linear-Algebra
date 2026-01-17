@@ -38,6 +38,7 @@
 *.app
 
 # debug information files
+*.dwotest_matrix.dSYM
 *.dwo
 # macOS debug symbols
 *.dSYM/
