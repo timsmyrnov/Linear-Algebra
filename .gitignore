@@ -38,4 +38,4 @@
 *.app
 
 # debug information files
-*.dwo
+*.dwotest_matrix.dSYM
